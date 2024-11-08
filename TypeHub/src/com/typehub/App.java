@@ -12,7 +12,7 @@ public class App {
 
 		
 		
-		System.out.println("typehub");
+		System.out.println("typehub"); 
 		new HomeScreen();
 	}
 
