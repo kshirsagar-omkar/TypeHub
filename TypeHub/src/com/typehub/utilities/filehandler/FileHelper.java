@@ -26,7 +26,8 @@ import java.io.IOException;
  */
 
 
-public class FIleHelper {
+public class FileHelper {
+	
 	private static final String sampleFilePath = "src/resources/sampleFile.txt";
 	
 	

@@ -6,13 +6,15 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.Timer;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 
-import com.typehub.utilities.filehandler.FIleHelper;
+import com.typehub.utilities.filehandler.FileHelper;
 
 
 
@@ -50,6 +52,19 @@ public class HomeScreen extends JFrame {
      */
     private Integer currentPosition = 0;
     
+    
+    /*
+     * Tracks the count of incorrect typed characters 
+     * */
+    private Integer countOfIncorrectTypedChars = 0;
+    
+    
+    /*
+     * A timer which runs in background after specific interval
+     * It's to check, if the user has typed all characters.
+     * */
+    private Timer timer;
+    
     /**
      * The sample text that users are expected to type, retrieved from FileHelper.
      */
@@ -73,7 +88,7 @@ public class HomeScreen extends JFrame {
     public HomeScreen() {
         
         // Retrieve sample text to be displayed in typing area
-        sampleText = FIleHelper.getSampleParagraph();
+        sampleText = FileHelper.getSampleParagraph();
 
         // Set layout to null for custom positioning
         this.setLayout(null);
@@ -113,7 +128,10 @@ public class HomeScreen extends JFrame {
                         currentPosition++;
                     } else {
                         // Highlight incorrect character if it doesn't match
-                        try {
+
+                    	//Increase the counter, which counts the characters which are typed incorrect 
+                    	countOfIncorrectTypedChars++; 
+                    	try {
                             incorrectHighlighter.addHighlight(currentPosition, currentPosition + 1, incorrectPainter);
                         } catch (BadLocationException ex) {
                             ex.printStackTrace();
@@ -128,6 +146,31 @@ public class HomeScreen extends JFrame {
             }
         });
 
+        
+        /*
+         * Timer which runs in background in every 250 mili-seconds
+         * It's to check, if the user typed all characters or not ?
+         * If the user has typed all characters then display him his score
+         * the count of correct and incorrect characters typed by him.
+         * 
+         * when he types all characters, display his score
+         * and then stop the timer.
+         * */
+        
+        timer = new Timer(250, e -> {
+        	if(currentPosition == sampleText.length() ) {
+        		//Display the score
+        		JOptionPane.showMessageDialog(null, "Your Score "
+        				+ "\nAll Characters : " + currentPosition
+        				+ "\nCorrectly typed characters : " + (currentPosition - countOfIncorrectTypedChars)
+        				+ "\nIncorrect typed characters : " + countOfIncorrectTypedChars);
+        		
+        		timer.stop(); // stop timer after displaying the score
+        	}
+        });
+        
+        timer.start(); // start the timer
+        
         // Set typing area size and position
         typingArea.setSize(1200, 400);
         typingArea.setLocation(145, 100);
