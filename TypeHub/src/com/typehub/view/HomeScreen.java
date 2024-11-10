@@ -57,12 +57,6 @@ public class HomeScreen extends JFrame {
 	 */
 	private Integer countOfIncorrectTypedChars = 0;
 
-	/*
-	 * A timer which runs in background after specific interval It's to check, if
-	 * the user has typed all characters.
-	 */
-	private Timer timer;
-
 	/**
 	 * The sample text that users are expected to type, retrieved from FileHelper.
 	 */
